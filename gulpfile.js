@@ -46,7 +46,13 @@ gulp.task('styles', function() {
         return fileName.indexOf(suffix) == 0;
     }
     
-    return gulp.src(['client/less/main.less', 'bower_components/bootswatch/**/bootswatch.less', 'bower_components/fontawesome/css/font-awesome.css'])
+    var fileList = [
+        'client/less/main.less', 
+        'bower_components/bootswatch/**/bootswatch.less', 
+        'bower_components/fontawesome/css/font-awesome.css'
+    ];
+    
+    return gulp.src(fileList)
         .pipe(gulpif(isBootswatchFile, foreach(function(stream, file) {
             var themeName = path.basename(path.dirname(file.path)),
                 content = replaceAll(baseContent, '$theme$', themeName),
