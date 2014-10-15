@@ -5,9 +5,11 @@ var gulp = require('gulp'),
     gulpif = require('gulp-if'),
     order = require('gulp-order'),
     gutil = require('gulp-util'),
+    rename = require('gulp-rename'),
     foreach = require('gulp-foreach'),
     debug = require('gulp-debug'),
     path =require('path'),
+    merge = require('merge-stream'),
     del = require('del');
 
 gulp.task('default', ['clean'], function() {
@@ -32,17 +34,39 @@ gulp.task('fonts', function() {
 gulp.task('styles', function() {
     
     var baseContent = '@import "bower_components/bootstrap/less/bootstrap.less";@import "bower_components/bootswatch/$theme$/variables.less";@import "bower_components/bootswatch/$theme$/bootswatch.less";@import "bower_components/bootstrap/less/utilities.less";';
+    var isBootswatchFile = function(file) {
+        var suffix = 'bootswatch.less';
+        return file.path.indexOf(suffix, file.path.length - suffix.length) !== -1;
+    }
     
-    return gulp.src('bower_components/bootswatch/**/bootswatch.less')
-        .pipe(foreach(function(stream, file) {
+    var isBootstrapFile = function(file) {
+        var suffix = 'bootstrap-',
+            fileName = path.basename(file.path);
+        
+        return fileName.indexOf(suffix) == 0;
+    }
+    
+    return gulp.src(['client/less/main.less', 'bower_components/bootswatch/**/bootswatch.less', 'bower_components/fontawesome/css/font-awesome.css'])
+        .pipe(gulpif(isBootswatchFile, foreach(function(stream, file) {
             var themeName = path.basename(path.dirname(file.path)),
                 content = replaceAll(baseContent, '$theme$', themeName),
                 file = string_src('bootstrap-' +  themeName + '.less', content);
-            
+
             return file;
-        }))
+        })))
         .pipe(less())
-        .pipe(gulp.dest('assets/css'));
+        .pipe(gulp.dest('assets/css'))
+        .pipe(gulpif(isBootstrapFile, foreach(function(stream, file) {
+            var fileName = path.basename(file.path),
+                themeName = fileName.substring(fileName.indexOf('-') + 1, fileName.indexOf('.'));
+            
+            return merge(stream, gulp.src(['assets/css/font-awesome.css', 'assets/css/main.css']))
+                .pipe(concat('style-' + themeName + ".css"))
+                .pipe(gulp.dest('assets/css'))
+                .pipe(rename({suffix: '.min'}))
+                .pipe(minifycss())
+                .pipe(gulp.dest('assets/css'));
+        })))
 });
 
 // http://stackoverflow.com/questions/1144783/replacing-all-occurrences-of-a-string-in-javascript
