@@ -1,0 +1,19 @@
+{
+  "name": "gulp-b-sample",
+  "version": "0.0.0",
+  "authors": [
+    "tugberkugurlu <tugberkugurlu@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootswatch": "~3.2.0+4",
+    "fontawesome": "~4.2.0"
+  }
+}

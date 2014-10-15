@@ -1,0 +1,23 @@
+{
+  "name": "gulp-b-sample",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tugberk Ugurlu <tugberkugurlu@gmail.com> (http://www.tugberkugurlu.com/)",
+  "license": "ISC",
+  "devDependencies": {
+    "del": "^0.1.3",
+    "gulp": "^3.8.8",
+    "gulp-concat": "^2.4.1",
+    "gulp-debug": "^1.0.1",
+    "gulp-foreach": "0.0.1",
+    "gulp-if": "^1.2.5",
+    "gulp-less": "^1.3.6",
+    "gulp-minify-css": "^0.3.10",
+    "gulp-order": "^1.1.1",
+    "gulp-util": "^3.0.1"
+  }
+}
