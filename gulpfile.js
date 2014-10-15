@@ -60,6 +60,7 @@ gulp.task('styles', function() {
             var fileName = path.basename(file.path),
                 themeName = fileName.substring(fileName.indexOf('-') + 1, fileName.indexOf('.'));
             
+            // https://github.com/gulpjs/gulp/blob/master/docs/recipes/using-multiple-sources-in-one-task.md
             return merge(stream, gulp.src(['assets/css/font-awesome.css', 'assets/css/main.css']))
                 .pipe(concat('style-' + themeName + ".css"))
                 .pipe(gulp.dest('assets/css'))
